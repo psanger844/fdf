@@ -6,11 +6,18 @@
 /*   By: psanger <psanger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 12:35:27 by psanger           #+#    #+#             */
-/*   Updated: 2023/12/11 19:28:25 by psanger          ###   ########.fr       */
+/*   Updated: 2023/12/12 17:00:02 by psanger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+
+int	ft_abs(int num)
+{
+	if (num < 0)
+		num *= -1;
+	return (num);
+}
 
 void	connect_line_x(t_data *data)
 {
@@ -24,12 +31,12 @@ void	connect_line_x(t_data *data)
 		|| data->y > HEIGHT || data->y < 0 || data->y1 > HEIGHT || data->y1 < 0)
 		return ;
 	i = 0;
-	num_pixel = abs(data->x1 - data->x);
-	if (abs(data->x1 - data->x) < abs(data->y1 - data->y))
-		num_pixel = abs(data->y1 - data->y);
+	num_pixel = ft_abs(data->x1 - data->x);
+	if (ft_abs(data->x1 - data->x) < ft_abs(data->y1 - data->y))
+		num_pixel = ft_abs(data->y1 - data->y);
 	while (i < num_pixel)
 	{
-		t_z = data->z + i * (data->z1 - data->z) / num_pixel;
+		t_z = (float)data->z + (float)i * ((float)data->z1 - (float)data->z) / (float)num_pixel;
 		t_x = data->x + i * (data->x1 - data->x) / num_pixel;
 		t_y = data->y + i * (data->y1 - data->y) / num_pixel;
 		mlx_put_pixel(data->image, t_x, t_y, get_rgba_custom(t_z, data));
@@ -49,9 +56,9 @@ void	connect_line_y(t_data *data)
 		|| data->y > HEIGHT || data->y < 0 || data->y2 > HEIGHT || data->y2 < 0)
 		return ;
 	i = 0;
-	num_pixel = abs(data->x2 - data->x);
-	if (abs(data->x2 - data->x) < abs(data->y2 - data->y))
-		num_pixel = abs(data->y2 - data->y);
+	num_pixel = ft_abs(data->x2 - data->x);
+	if (ft_abs(data->x2 - data->x) < ft_abs(data->y2 - data->y))
+		num_pixel = ft_abs(data->y2 - data->y);
 	while (i < num_pixel)
 	{
 		t_z = data->z + i * (data->z2 - data->z) / num_pixel;

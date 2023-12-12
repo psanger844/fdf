@@ -6,7 +6,7 @@
 /*   By: psanger <psanger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 14:18:19 by psanger           #+#    #+#             */
-/*   Updated: 2023/12/11 20:07:33 by psanger          ###   ########.fr       */
+/*   Updated: 2023/12/12 17:14:21 by psanger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,12 @@ int	get_biggest(t_data *data)
 
 	i = 0;
 	j = 0;
-	biggest = data->matrix[i][j];
+	biggest = data->matrix[i][j] + data->height;
 	while (i < data->len_y)
 	{
 		while (j < data->len_x)
 		{
-			if (biggest < data->matrix[i][j])
+			if (biggest < data->matrix[i][j] + data->height)
 				biggest = data->matrix[i][j];
 			j++;
 		}
@@ -35,7 +35,7 @@ int	get_biggest(t_data *data)
 	return (biggest);
 }
 
-int	get_rgba_custom(int value, t_data *data)
+int	get_rgba_custom(float value, t_data *data)
 {
 	int		r;
 	float	g;
@@ -43,13 +43,13 @@ int	get_rgba_custom(int value, t_data *data)
 	int		a;
 	int		biggest;
 
-	if (value < 0)
-		value *= -1;
 	biggest = get_biggest(data);
+	value = ft_abs(value);
+	biggest = ft_abs(biggest);
 	r = 255;
 	g = 255 - ((float)value / (float)biggest * 255);
-	b = 255 - ((float)value / (float)biggest * 255 / 4);
-	a = 100;
+	b = 255 - ((float)value / (float)biggest * 255);
+	a = 255;
 	return (r << 24 | (int)g << 16 | (int)b << 8 | a);
 }
 

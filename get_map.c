@@ -6,7 +6,7 @@
 /*   By: psanger <psanger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 15:32:20 by psanger           #+#    #+#             */
-/*   Updated: 2023/12/11 20:49:47 by psanger          ###   ########.fr       */
+/*   Updated: 2023/12/12 12:29:04 by psanger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,10 @@ void	ft_free(char **str)
 	int	i;
 
 	i = 0;
-	while (str[i])
-		i++;
-	while (i)
+	while (str[i] != NULL)
 	{
 		free(str[i]);
-		i--;
+		i++;
 	}
 	free(str);
 }

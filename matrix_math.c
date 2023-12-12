@@ -6,7 +6,7 @@
 /*   By: psanger <psanger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/05 15:17:13 by psanger           #+#    #+#             */
-/*   Updated: 2023/12/11 20:53:08 by psanger          ###   ########.fr       */
+/*   Updated: 2023/12/12 17:55:24 by psanger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,47 +31,24 @@ void	reset(t_data *data)
 	}
 }
 
-void	test(t_data *data)
+void	ft_hook(void *param)
 {
-	int	x;
-	int	y;
+	t_data	*data;
 
-	x = 0;
-	y = 0;
-	while (y < data->len_y - 1)
-	{
-		while (x < data->len_x)
-		{
-			data->x = x_coordiante(x, y, data);
-			data->y = y_coordiante(x, y, data);
-			data->z = data->matrix[y][x];
-			data->x2 = x_coordiante(x, y + 1, data);
-			data->y2 = y_coordiante(x, y + 1, data);
-			data->z2 = data->matrix[y + 1][x];
-			connect_line_y(data);
-			x++;
-		}
-		x = 0;
-		y++;
-	}
-	x = 0;
-	y = 0;
-	while (y < data->len_y)
-	{
-		while (x < data->len_x - 1)
-		{
-			data->x = x_coordiante(x, y, data);
-			data->y = y_coordiante(x, y, data);
-			data->z = data->matrix[y][x];
-			data->x1 = x_coordiante(x + 1, y, data);
-			data->y1 = y_coordiante(x + 1, y, data);
-			data->z1 = data->matrix[y][x + 1];
-			connect_line_x(data);
-			x++;
-		}
-		x = 0;
-		y++;
-	}
+	data = param;
+	if (mlx_is_key_down(data->mlx, MLX_KEY_W))
+		data->move_y -= 10;
+	if (mlx_is_key_down(data->mlx, MLX_KEY_S))
+		data->move_y += 10;
+	if (mlx_is_key_down(data->mlx, MLX_KEY_A))
+		data->move_x -= 10;
+	if (mlx_is_key_down(data->mlx, MLX_KEY_D))
+		data->move_x += 10;
+	if (mlx_is_key_down(data->mlx, MLX_KEY_1))
+		data->height += 10;
+	if (mlx_is_key_down(data->mlx, MLX_KEY_2))
+		data->height -= 10;
+	ft_hook2(data);
 }
 
 void	ft_hook2(void *param)
@@ -81,10 +58,9 @@ void	ft_hook2(void *param)
 	data = param;
 	if (mlx_is_key_down(data->mlx, MLX_KEY_ESCAPE))
 	{
-		free_matrix(data);
 		mlx_terminate(data->mlx);
+		free_matrix(data);
 		free(data);
-		system("leaks fdf");
 		exit (0);
 	}
 	if (mlx_is_key_down(data->mlx, MLX_KEY_RIGHT))
@@ -100,7 +76,7 @@ void	ft_hook2(void *param)
 	if (mlx_is_key_down(data->mlx, MLX_KEY_M))
 		data->distance -= 2;
 	reset(data);
-	test(data);
+	parse_coordinates_1(data);
 }
 
 int	y_coordiante(int x, int y, t_data *data)
@@ -122,11 +98,14 @@ int	y_coordiante(int x, int y, t_data *data)
 	if (x >= (float)(data->len_x / 2))
 		alpha = atan(delta_y / delta_x) * (180 / PI);
 	len = data->distance * pow ((pow(delta_x, 2) + pow(delta_y, 2)), 0.5);
+	data->temp = sin(data->rotation1 * PI / 180) * data->distance * data->matrix[y][x];
 	if (len == 0)
-		return (WIDTH / 2 - sin(data->rotation1 * PI / 180) * data->distance * data->matrix[y][x]);
+		return (HEIGHT / 2 - data->temp + data->move_y);
 	y2 = sin(((alpha + data->rotation) * PI) / 180) * len + HEIGHT / 2;
-	y2 = HEIGHT / 2 + (y2 - HEIGHT / 2) * cos(data->rotation1 * PI / 180) - sin(data->rotation1 * PI / 180) * data->distance * data->matrix[y][x];
-	return ((int)y2);
+	y2 = HEIGHT / 2 + (y2 - HEIGHT / 2) * cos(data->rotation1 * PI / 180) - data->temp;
+	if (data->matrix[y][x] != 0)
+		y2 = y2 + data->height;
+	return ((int)y2 + data->move_y);
 }
 
 int	x_coordiante(int x, int y, t_data *data)
@@ -149,7 +128,7 @@ int	x_coordiante(int x, int y, t_data *data)
 		alpha = atan(delta_y / delta_x) * (180 / PI);
 	len = data->distance * pow((pow(delta_x, 2) + pow(delta_y, 2)), 0.5);
 	if (len == 0)
-		return (WIDTH / 2);
+		return (WIDTH / 2 + data->move_x);
 	x2 = cos(((alpha + data->rotation) * PI) / 180) * len + WIDTH / 2;
-	return ((int)x2);
+	return ((int)x2 + data->move_x);
 }

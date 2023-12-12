@@ -6,7 +6,7 @@
 /*   By: psanger <psanger@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/04 17:21:10 by psanger           #+#    #+#             */
-/*   Updated: 2023/12/11 20:11:21 by psanger          ###   ########.fr       */
+/*   Updated: 2023/12/12 17:12:42 by psanger          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,17 @@ typedef struct s_data
 	int			x2;
 	int			y2;
 	int			z2;
-	int			big;
+	float		temp;
+	int			move_x;
+	int			move_y;
+	int			height;
 }				t_data;
 
 int		**get_matrix(int fd, int len_y, t_data *data);
 int		get_len_y_map(int fd);
 void	fill_matrix(int **matrix, char *line, int k, t_data *data);
 
+void	ft_hook(void *param);
 void	ft_hook2(void *param);
 
 int		y_coordiante(int x, int y, t_data *data);
@@ -62,13 +66,15 @@ void	print_point(t_data *data, int x, int y);
 void	reset_point(t_data *data, int x, int y);
 void	reset(t_data *data);
 
-int		get_rgba_custom(int value, t_data *data);
+int		get_rgba_custom(float value, t_data *data);
 int		get_rgba(int r, int g, int b, int a);
 
 void	connect_line_x(t_data *data);
 void	connect_line_y(t_data *data);
+int		ft_abs(int num);
 
-void	test(t_data *data);
+void	parse_coordinates_1(t_data *data);
+void	parse_coordinates_2(t_data *data);
 void	free_matrix(t_data *data);
 
 #endif

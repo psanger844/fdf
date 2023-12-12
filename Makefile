@@ -1,7 +1,7 @@
 NAME = fdf
 CC = cc
-# CFLAGS = -Wall -Wextra -Werror
-SRCS =  get_map.c color.c matrix_math.c connect_line.c fdf.c
+CFLAGS = -Wall -Wextra -Werror
+SRCS =  get_map.c color.c matrix_math.c connect_line.c fdf.c parse_coordinates.c
 MLXFLAGS = -framework Cocoa -framework OpenGL -framework IOKit
 MLXINCLUDE = MLX42/build/libmlx42.a -Iinclude -lglfw
 
